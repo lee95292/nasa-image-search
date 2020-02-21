@@ -9,10 +9,17 @@ import {
 } from "react-bootstrap";
 class Navigation extends Component {
   state = {
-    filter: "test1"
+    filter: "test1",
+    input: ""
   };
   handleFilter = e => {
     this.setState({ filter: e.target.text });
+  };
+  handleSearch = e => {
+    //axios
+  };
+  handleChange = e => {
+    console.log(e.target.value);
   };
   render() {
     const { filter } = this.state;
@@ -43,6 +50,7 @@ class Navigation extends Component {
                 </NavDropdown.Item>
               </NavDropdown>
               <FormControl
+                onChange={this.handleChange}
                 type="text"
                 placeholder="Search"
                 className="mr-sm-2"

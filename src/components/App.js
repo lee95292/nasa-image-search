@@ -5,16 +5,16 @@ import Navigation from "./Navigation";
 import "bootstrap/dist/css/bootstrap.min.css";
 class App extends Component {
   state = {
-    item: [{ title: "test", desc: "test", image: "test" }]
+    items: [{ title: "test", desc: "test", image: "test" }]
   };
 
   render() {
-    const { item } = this.state;
+    const { items } = this.state;
     return (
       <div>
         <Template>
           <Navigation />
-          <ImageList item={item} />
+          <ImageList item={items} />
         </Template>
       </div>
     );
