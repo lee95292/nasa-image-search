@@ -3,13 +3,18 @@ import Template from "./Template";
 import ImageList from "./ImageList";
 import Navigation from "./Navigation";
 import "bootstrap/dist/css/bootstrap.min.css";
-export class App extends Component {
+class App extends Component {
+  state = {
+    item: [{ title: "test", desc: "test", image: "test" }]
+  };
+
   render() {
+    const { item } = this.state;
     return (
       <div>
         <Template>
           <Navigation />
-          <ImageList />
+          <ImageList item={item} />
         </Template>
       </div>
     );
