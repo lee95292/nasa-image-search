@@ -57,6 +57,8 @@ class ImageItem extends Component {
               {foldable}
             </Card.Text>
             {keywords}
+            <hr />
+            {item.data[0].date_created.slice(0, 10)}
           </Card.Body>
         </Card>
       </div>
