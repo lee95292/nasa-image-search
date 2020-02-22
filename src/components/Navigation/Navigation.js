@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 class Navigation extends Component {
   state = {
-    filter: "test1",
+    filter: "전체",
     input: ""
   };
   handleFilter = e => {
@@ -18,11 +18,10 @@ class Navigation extends Component {
   handleSearch = e => {
     //axios
   };
-  handleChange = e => {
-    console.log(e.target.value);
-  };
+  handleChange = e => {};
   render() {
     const { filter } = this.state;
+    const { total_hit } = this.props;
     return (
       <div>
         <Navbar bg="light" expand="lg">
@@ -36,17 +35,17 @@ class Navigation extends Component {
             <Form inline>
               <NavDropdown title={filter} id="basic-nav-dropdown">
                 <NavDropdown.Item onClick={this.handleFilter}>
-                  test2
+                  전체
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={this.handleFilter}>
-                  Another action
+                  제목
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={this.handleFilter}>
-                  Something
+                  키워드
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={this.handleFilter}>
-                  Separated link
+                  결과 내 검색
                 </NavDropdown.Item>
               </NavDropdown>
               <FormControl
@@ -59,6 +58,7 @@ class Navigation extends Component {
             </Form>
           </Navbar.Collapse>
         </Navbar>
+        검색결과 : {total_hit}개
       </div>
     );
   }

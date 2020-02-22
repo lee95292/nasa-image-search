@@ -11,46 +11,76 @@ class App extends Component {
     items: [],
     page: 1,
     bookmark: [],
-    query: "moon"
+    query: {
+      total: "moon",
+      keyword: "",
+      title: ""
+    },
+    total_hit: 0
   };
 
   handlePagination = () => {
-    const { page, query } = this.state;
+    const { page, query, items } = this.state;
+    let storageCollection = JSON.parse(localStorage.getItem("collection"));
+    // 새로 요청하여 업데이트해야하는 경우
     if (page % 10 === 9) {
       axios
-        .get(nasaAPIRUL + "search?q=" + query + "&page" + (page + 1) / 10)
+        .get(
+          nasaAPIRUL +
+            "search?q=" +
+            query.total +
+            "&page=" +
+            parseInt((page + 1) / 10)
+        )
         .then(res => {
-          const prevItem = localStorage.get("items");
-          localStorage.setItem(prevItem.concat(res.data.collection.items));
+          console.log(res);
+          const nextpageItems = res.data.collection.items;
+          storageCollection.items = storageCollection.items.concat(
+            nextpageItems
+          );
+          localStorage.setItem("collection", JSON.stringify(storageCollection));
         });
     }
-    this.setState({ page: page + 1 });
+    this.setState({
+      page: page + 1,
+      items: items.concat(
+        storageCollection.items.slice(page * 10, (page + 1) * 10)
+      )
+    });
+    console.log(this.state.items);
   };
-  componentDidMount() {
+  componentWillMount() {
     const { query, page } = this.state;
-    if (localStorage.getItem("items") !== null) {
-      // return;
+    const storageCollection = JSON.parse(localStorage.getItem("collection"));
+    if (storageCollection != null) {
+      this.setState({
+        items: storageCollection.items.slice(0, 10),
+        total_hit: storageCollection.metadata.total_hits
+      });
+      return;
     }
 
-    axios.get(nasaAPIRUL + "search?q=" + query + "&page=" + page).then(res => {
-      console.log(res);
-      const defaultItems = res.data.collection.items;
+    axios
+      .get(nasaAPIRUL + "search?q=" + query.total + "&page=" + page)
+      .then(res => {
+        console.log(res);
+        const defaultItems = res.data.collection;
 
-      this.setState({
-        items: defaultItems.slice(0, 10)
+        this.setState({
+          items: defaultItems.items.slice(0, 10),
+          total_hit: res.data.collection.metadata.total_hits
+        });
+        localStorage.setItem("collection", JSON.stringify(defaultItems));
       });
-      localStorage.setItem("items", defaultItems);
-      console.log(defaultItems);
-    });
   }
   render() {
-    const { items } = this.state;
+    const { items, total_hit } = this.state;
     return (
       <div>
         <Template>
-          <Navigation />
+          <Navigation total_hit={total_hit} />
           <ImageList items={items} />
-          <a href="pg"></a>
+          <span onClick={this.handlePagination}>more..</span>
         </Template>
       </div>
     );

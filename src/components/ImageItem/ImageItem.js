@@ -13,19 +13,20 @@ class ImageItem extends Component {
   render() {
     const { item } = this.props;
     let contentLen = 0;
-    let imageSource = item.links[0].href;
-    const keywords = item.data[0].keywords.map(keyword => (
-      <Button variant="primary">{keyword}</Button>
-    ));
-    if (item.links.length === 0) {
-      imageSource = "xx";
+    let imageSource = "default source";
+    if (item.links != null) {
+      imageSource = item.links[0].href;
     }
+    const keywords = item.data[0].keywords.map((keyword, index) => (
+      <Button variant="primary" key={index}>
+        {keyword}
+      </Button>
+    ));
 
     const summary = item.data[0].description
       .split(" ")
       .filter(v => {
         contentLen += v.length;
-        console.log(contentLen);
         if (contentLen <= 150) {
           return v;
         }
@@ -47,7 +48,7 @@ class ImageItem extends Component {
     }
 
     return (
-      <div>
+      <div className="image-item">
         <Card style={{ width: "18rem" }}>
           <Card.Img variant="top" src={imageSource} />
           <Card.Body>

@@ -4,7 +4,9 @@ import "./ImageList.css";
 class ImageList extends Component {
   render() {
     const { items } = this.props;
-    const imageList = items.map(item => <ImageItem item={item}></ImageItem>);
+    const imageList = items.map((item, index) => (
+      <ImageItem item={item} key={index}></ImageItem>
+    ));
     return (
       <div className="image-list">
         {imageList}
