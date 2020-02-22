@@ -6,6 +6,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 
 const nasaAPIRUL = "https://images-api.nasa.gov/";
+const queryMapper = {};
+queryMapper["title"] = "title";
+queryMapper["total"] = "q";
+queryMapper["keyword"] = "keywords";
+
 class App extends Component {
   state = {
     items: [],
@@ -49,7 +54,29 @@ class App extends Component {
     });
     console.log(this.state.items);
   };
+  handleSearch = (filter, input) => {
+    axios
+      .get(nasaAPIRUL + "search?" + queryMapper[filter] + "=" + input)
+      .then(res => {
+        localStorage.setItem("collection", JSON.stringify(res.data.collection));
+        this.setState({
+          items: res.data.collection.items,
+          query: {
+            ...this.state,
+            [filter]: input
+          },
+          page: 1,
+          total_hit: res.data.collection.metadata.total_hits
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    console.log(this.state.query, input);
+    // axios.get(nasaAPIRUL + "");
+  };
   componentWillMount() {
+    console.log("test");
     const { query, page } = this.state;
     const storageCollection = JSON.parse(localStorage.getItem("collection"));
     if (storageCollection != null) {
@@ -63,7 +90,6 @@ class App extends Component {
     axios
       .get(nasaAPIRUL + "search?q=" + query.total + "&page=" + page)
       .then(res => {
-        console.log(res);
         const defaultItems = res.data.collection;
 
         this.setState({
@@ -71,6 +97,9 @@ class App extends Component {
           total_hit: res.data.collection.metadata.total_hits
         });
         localStorage.setItem("collection", JSON.stringify(defaultItems));
+      })
+      .catch(error => {
+        console.log(error);
       });
   }
   render() {
@@ -78,7 +107,7 @@ class App extends Component {
     return (
       <div>
         <Template>
-          <Navigation total_hit={total_hit} />
+          <Navigation total_hit={total_hit} onSubmit={this.handleSearch} />
           <ImageList items={items} />
           <span onClick={this.handlePagination}>more..</span>
         </Template>

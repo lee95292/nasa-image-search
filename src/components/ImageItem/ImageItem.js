@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Card, Button } from "react-bootstrap";
 import "./ImageItem.css";
+
+let imageSource = "";
 class ImageItem extends Component {
   state = {
     vervose: false
@@ -9,19 +11,23 @@ class ImageItem extends Component {
   handleVervose = () => {
     this.setState({ vervose: !this.state.vervose });
   };
-
+  componentWillMount() {
+    imageSource = "default source";
+  }
   render() {
     const { item } = this.props;
     let contentLen = 0;
-    let imageSource = "default source";
     if (item.links != null) {
       imageSource = item.links[0].href;
     }
-    const keywords = item.data[0].keywords.map((keyword, index) => (
-      <Button variant="primary" key={index}>
-        {keyword}
-      </Button>
-    ));
+    let keywords = null;
+    if (item.data[0].keywords != null) {
+      keywords = item.data[0].keywords.map((keyword, index) => (
+        <Button variant="primary" key={index}>
+          {keyword}
+        </Button>
+      ));
+    }
 
     const summary = item.data[0].description
       .split(" ")
