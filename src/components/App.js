@@ -60,7 +60,7 @@ class App extends Component {
       .then(res => {
         localStorage.setItem("collection", JSON.stringify(res.data.collection));
         this.setState({
-          items: res.data.collection.items,
+          items: res.data.collection.items.slice(0, 10),
           query: {
             ...this.state,
             [filter]: input
