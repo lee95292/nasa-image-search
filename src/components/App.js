@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 
 const nasaAPIRUL = "https://images-api.nasa.gov/";
+let storageCollection = null;
 const queryMapper = {};
 queryMapper["title"] = "title";
 queryMapper["total"] = "q";
@@ -26,33 +27,34 @@ class App extends Component {
 
   handlePagination = () => {
     const { page, query, items } = this.state;
-    let storageCollection = JSON.parse(localStorage.getItem("collection"));
+    storageCollection = JSON.parse(localStorage.getItem("collection"));
     // 새로 요청하여 업데이트해야하는 경우
-    if (page % 10 === 9) {
-      axios
-        .get(
-          nasaAPIRUL +
-            "search?q=" +
-            query.total +
-            "&page=" +
-            parseInt((page + 1) / 10)
-        )
-        .then(res => {
-          console.log(res);
-          const nextpageItems = res.data.collection.items;
-          storageCollection.items = storageCollection.items.concat(
-            nextpageItems
-          );
-          localStorage.setItem("collection", JSON.stringify(storageCollection));
-        });
+    if (
+      page % 10 === 9 && // localstorage에 저장된 마지막 페이지
+      storageCollection.links != null && // REST에서 제공되는 좌표 X
+      storageCollection.links[storageCollection.links.length - 1].rel != "prev" // 마지막 페이지가 아님
+    ) {
+      axios.get(storageCollection.links[0].href).then(res => {
+        console.log(res);
+        const nextpageItems = res.data.collection.items;
+
+        storageCollection = JSON.parse(localStorage.getItem("collection"));
+        storageCollection.items = storageCollection.items.concat(nextpageItems);
+        storageCollection.links = res.data.collection.links;
+
+        localStorage.setItem("collection", JSON.stringify(storageCollection));
+      });
     }
-    this.setState({
-      page: page + 1,
-      items: items.concat(
-        storageCollection.items.slice(page * 10, (page + 1) * 10)
-      )
-    });
-    console.log(this.state.items);
+
+    if (items.length < storageCollection.items.length) {
+      this.setState({
+        page: page + 1,
+        items: items.concat(
+          storageCollection.items.slice(page * 10, (page + 1) * 10)
+        )
+      });
+      console.log(this.state.items);
+    }
   };
   handleSearch = (filter, input) => {
     axios
@@ -78,7 +80,7 @@ class App extends Component {
   componentWillMount() {
     console.log("test");
     const { query, page } = this.state;
-    const storageCollection = JSON.parse(localStorage.getItem("collection"));
+    storageCollection = JSON.parse(localStorage.getItem("collection"));
     if (storageCollection != null) {
       this.setState({
         items: storageCollection.items.slice(0, 10),

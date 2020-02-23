@@ -12,7 +12,7 @@ class ImageItem extends Component {
     this.setState({ vervose: !this.state.vervose });
   };
   componentWillMount() {
-    imageSource = "default source";
+    imageSource = "/default-image.jpg";
   }
   render() {
     const { item } = this.props;
