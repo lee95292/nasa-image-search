@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Navbar, NavDropdown, Nav, FormControl, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import "./Navigation.css";
 
 const filterMapper = {};
@@ -35,8 +36,16 @@ class Navigation extends Component {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
-              <Nav.Link href="#bookmark">Bookmark</Nav.Link>
+              <Nav.Link>
+                <Link exact to="/">
+                  Home
+                </Link>
+              </Nav.Link>
+              <Nav.Link>
+                <Link exact to="/bookmark">
+                  Bookmark
+                </Link>
+              </Nav.Link>
             </Nav>
             <div className="inline">
               <NavDropdown title={filterMapper[filter]} id="basic-nav-dropdown">

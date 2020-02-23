@@ -4,9 +4,10 @@ import ImageList from "./ImageList";
 import Navigation from "./Navigation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-
+import { Route } from "react-router-dom";
 const nasaAPIRUL = "https://images-api.nasa.gov/";
 let storageCollection = null;
+
 const queryMapper = {};
 queryMapper["title"] = "title";
 queryMapper["total"] = "q";
@@ -24,9 +25,19 @@ class App extends Component {
     },
     total_hit: 0
   };
+  handleBookmark = item => {
+    const bookmark = this.state.bookmark;
+    this.setState({
+      bookmark: {
+        ...bookmark,
+        item
+      }
+    });
 
+    console.log(bookmark);
+  };
   handlePagination = () => {
-    const { page, query, items } = this.state;
+    const { page, items } = this.state;
     storageCollection = JSON.parse(localStorage.getItem("collection"));
     // 새로 요청하여 업데이트해야하는 경우
     if (
@@ -74,10 +85,9 @@ class App extends Component {
       .catch(error => {
         console.log(error);
       });
-    console.log(this.state.query, input);
-    // axios.get(nasaAPIRUL + "");
   };
-  componentWillMount() {
+
+  componentDidMount() {
     console.log("test");
     const { query, page } = this.state;
     storageCollection = JSON.parse(localStorage.getItem("collection"));
@@ -105,13 +115,29 @@ class App extends Component {
       });
   }
   render() {
-    const { items, total_hit } = this.state;
+    const { items, total_hit, bookmark } = this.state;
+    const BookmarkList = items => <ImageList items={items} />;
+    const SearchResult = (items, handlePagination) => (
+      <div>
+        <ImageList items={items} />
+        <span onClick={handlePagination}>more..</span>
+      </div>
+    );
     return (
       <div>
         <Template>
           <Navigation total_hit={total_hit} onSubmit={this.handleSearch} />
-          <ImageList items={items} />
-          <span onClick={this.handlePagination}>more..</span>
+          <Route
+            exaxt
+            path="/"
+            render={() => (
+              <SearchResult
+                handlePagination={this.handlePagination}
+                items={items}
+              />
+            )}
+          />
+          {/* <Route exact path="bookmark" component={bookmark => BookmarkList} /> */}
         </Template>
       </div>
     );
