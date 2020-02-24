@@ -28,7 +28,7 @@ class Navigation extends Component {
   };
   render() {
     const { filter, input } = this.state;
-    const { total_hit, onSubmit } = this.props;
+    const { onSubmit } = this.props;
     return (
       <div>
         <Navbar bg="light" expand="lg">
@@ -37,7 +37,7 @@ class Navigation extends Component {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link>
-                <Link exact to="/">
+                <Link exact to="/home">
                   Home
                 </Link>
               </Nav.Link>
@@ -79,7 +79,6 @@ class Navigation extends Component {
             </div>
           </Navbar.Collapse>
         </Navbar>
-        검색결과 : {total_hit}개
       </div>
     );
   }

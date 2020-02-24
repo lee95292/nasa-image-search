@@ -116,13 +116,7 @@ class App extends Component {
   }
   render() {
     const { items, total_hit, bookmark } = this.state;
-    const BookmarkList = items => <ImageList items={items} />;
-    const SearchResult = (items, handlePagination) => (
-      <div>
-        <ImageList items={items} />
-        <span onClick={handlePagination}>more..</span>
-      </div>
-    );
+
     return (
       <div>
         <Template>
@@ -131,13 +125,23 @@ class App extends Component {
             exaxt
             path="/"
             render={() => (
-              <SearchResult
-                handlePagination={this.handlePagination}
-                items={items}
-              />
+              <div>
+                검색 결과 : {total_hit}개
+                <ImageList items={items} />
+                <span onClick={this.handlePagination}>more..</span>
+              </div>
             )}
           />
-          {/* <Route exact path="bookmark" component={bookmark => BookmarkList} /> */}
+          <Route
+            render={() => (
+              <div>
+                북마크 : {bookmark.length}개
+                <ImageList items={bookmark} />
+              </div>
+            )}
+            exact
+            path="/bookmark"
+          />
         </Template>
       </div>
     );
