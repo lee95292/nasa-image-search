@@ -15,11 +15,12 @@ class ImageItem extends Component {
     imageSource = "/default-image.jpg";
   }
   render() {
-    const { item } = this.props;
+    const { item, onBookmark } = this.props;
     let contentLen = 0;
     if (item.links != null) {
       imageSource = item.links[0].href;
     }
+
     let keywords = null;
     if (item.data[0].keywords != null) {
       keywords = item.data[0].keywords.map((keyword, index) => (
@@ -29,15 +30,18 @@ class ImageItem extends Component {
       ));
     }
 
-    const summary = item.data[0].description
-      .split(" ")
-      .filter(v => {
-        contentLen += v.length;
-        if (contentLen <= 150) {
-          return v;
-        }
-      })
-      .join(" ");
+    let summary;
+    if (summary != null) {
+      summary = item.data[0].description
+        .split(" ")
+        .filter(v => {
+          contentLen += v.length;
+          if (contentLen <= 150) {
+            return v;
+          }
+        })
+        .join(" ");
+    }
 
     let foldable = this.state.vervose ? (
       <span className="foldable" onClick={this.handleVervose}>
@@ -54,7 +58,7 @@ class ImageItem extends Component {
     }
 
     return (
-      <div className="image-item">
+      <div className="image-item" onDoubleClick={() => onBookmark(item)}>
         <Card style={{ width: "18rem" }}>
           <Card.Img variant="top" src={imageSource} />
           <Card.Body>

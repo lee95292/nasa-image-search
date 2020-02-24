@@ -7,6 +7,7 @@ import axios from "axios";
 import { Route } from "react-router-dom";
 const nasaAPIRUL = "https://images-api.nasa.gov/";
 let storageCollection = null;
+let storageBookmark = null;
 
 const queryMapper = {};
 queryMapper["title"] = "title";
@@ -27,14 +28,21 @@ class App extends Component {
   };
   handleBookmark = item => {
     const bookmark = this.state.bookmark;
-    this.setState({
-      bookmark: {
-        ...bookmark,
-        item
-      }
-    });
+    const index = bookmark.indexOf(item);
 
-    console.log(bookmark);
+    if (index < 0) {
+      console.log("handleBookmark push " + item);
+      bookmark.push(item);
+    } else {
+      // route가 bookmark일때만 지우는 조건 : 현재 home탭에서도 북마크 삭제 가능
+      console.log(item + "removed");
+      bookmark.splice(index, 1);
+    }
+
+    this.setState({
+      bookmark: bookmark
+    });
+    localStorage.setItem("bookmark", JSON.stringify(bookmark));
   };
   handlePagination = () => {
     const { page, items } = this.state;
@@ -68,6 +76,7 @@ class App extends Component {
     }
   };
   handleSearch = (filter, input) => {
+    console.log("test search box");
     axios
       .get(nasaAPIRUL + "search?" + queryMapper[filter] + "=" + input)
       .then(res => {
@@ -87,33 +96,53 @@ class App extends Component {
       });
   };
 
-  componentDidMount() {
-    console.log("test");
+  loadInitialImageItems() {
     const { query, page } = this.state;
+
     storageCollection = JSON.parse(localStorage.getItem("collection"));
+
     if (storageCollection != null) {
       this.setState({
         items: storageCollection.items.slice(0, 10),
         total_hit: storageCollection.metadata.total_hits
       });
-      return;
     }
+    // LocalStorage에 저장된 데이터 없이 초기 로딩
+    else {
+      axios
+        .get(nasaAPIRUL + "search?q=" + query.total + "&page=" + page)
+        .then(res => {
+          const defaultItems = res.data.collection;
 
-    axios
-      .get(nasaAPIRUL + "search?q=" + query.total + "&page=" + page)
-      .then(res => {
-        const defaultItems = res.data.collection;
-
-        this.setState({
-          items: defaultItems.items.slice(0, 10),
-          total_hit: res.data.collection.metadata.total_hits
+          this.setState({
+            items: defaultItems.items.slice(0, 10),
+            total_hit: res.data.collection.metadata.total_hits
+          });
+          localStorage.setItem("collection", JSON.stringify(defaultItems));
+        })
+        .catch(error => {
+          console.log(error);
         });
-        localStorage.setItem("collection", JSON.stringify(defaultItems));
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    }
   }
+  loadInitailBookmarkItems() {
+    storageBookmark = JSON.parse(localStorage.getItem("bookmark"));
+
+    if (storageBookmark != null) {
+      this.setState({
+        bookmark: storageBookmark
+      });
+    } else {
+      this.setState({
+        bookmark: []
+      });
+    }
+  }
+  componentDidMount() {
+    this.loadInitialImageItems();
+    this.loadInitailBookmarkItems();
+  }
+
   render() {
     const { items, total_hit, bookmark } = this.state;
 
@@ -123,12 +152,12 @@ class App extends Component {
           <Navigation total_hit={total_hit} onSubmit={this.handleSearch} />
           <Route
             exaxt
-            path="/"
+            path="/home"
             render={() => (
               <div>
                 검색 결과 : {total_hit}개
-                <ImageList items={items} />
-                <span onClick={this.handlePagination}>more..</span>
+                <ImageList items={items} onBookmark={this.handleBookmark} />
+                <span onMouseOver={this.handlePagination}>more..</span>
               </div>
             )}
           />
@@ -136,7 +165,7 @@ class App extends Component {
             render={() => (
               <div>
                 북마크 : {bookmark.length}개
-                <ImageList items={bookmark} />
+                <ImageList items={bookmark} onBookmark={this.handleBookmark} />
               </div>
             )}
             exact

@@ -72,7 +72,7 @@ class Navigation extends Component {
               />
               <Button
                 variant="outline-success"
-                // onClick={onSubmit(filter, input)}
+                onClick={() => onSubmit(filter, input)}
               >
                 Search
               </Button>
