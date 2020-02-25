@@ -1,0 +1,13 @@
+.page-add {
+  /* layout */
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+
+  /* text */
+  text-align: center;
+  color: blue;
+
+  border: 1px solid;
+  border-radius: 1rem;
+}

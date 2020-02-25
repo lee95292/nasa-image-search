@@ -5,6 +5,8 @@ import Navigation from "./Navigation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { Route } from "react-router-dom";
+import "./App.css";
+
 const nasaAPIRUL = "https://images-api.nasa.gov/";
 let storageCollection = null;
 let storageBookmark = null;
@@ -26,6 +28,14 @@ class App extends Component {
     },
     total_hit: 0
   };
+
+  shouldComponentUpdate(nextState) {
+    const bookmark = this.state.bookmark !== nextState.bookmark;
+    const items = this.state.items !== nextState.items;
+    const page = this.state.page !== nextState.page;
+
+    return bookmark || items || page;
+  }
   handleBookmark = item => {
     const bookmark = this.state.bookmark;
     const index = bookmark.indexOf(item);
@@ -44,6 +54,7 @@ class App extends Component {
     });
     localStorage.setItem("bookmark", JSON.stringify(bookmark));
   };
+
   handlePagination = () => {
     const { page, items } = this.state;
     storageCollection = JSON.parse(localStorage.getItem("collection"));
@@ -75,6 +86,7 @@ class App extends Component {
       console.log(this.state.items);
     }
   };
+
   handleSearch = (filter, input) => {
     console.log("test search box");
     axios
@@ -125,6 +137,7 @@ class App extends Component {
         });
     }
   }
+
   loadInitailBookmarkItems() {
     storageBookmark = JSON.parse(localStorage.getItem("bookmark"));
 
@@ -157,7 +170,11 @@ class App extends Component {
               <div>
                 검색 결과 : {total_hit}개
                 <ImageList items={items} onBookmark={this.handleBookmark} />
-                <span onMouseOver={this.handlePagination}>more..</span>
+                {total_hit > items.length && (
+                  <div className="page-add" onMouseOver={this.handlePagination}>
+                    more..
+                  </div>
+                )}
               </div>
             )}
           />
