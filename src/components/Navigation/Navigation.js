@@ -37,7 +37,7 @@ class Navigation extends Component {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link>
-                <Link exact to="/home">
+                <Link exact to="/">
                   Home
                 </Link>
               </Nav.Link>

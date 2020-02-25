@@ -164,8 +164,7 @@ class App extends Component {
         <Template>
           <Navigation total_hit={total_hit} onSubmit={this.handleSearch} />
           <Route
-            exaxt
-            path="/home"
+            exact path="/"
             render={() => (
               <div>
                 검색 결과 : {total_hit}개
@@ -185,8 +184,7 @@ class App extends Component {
                 <ImageList items={bookmark} onBookmark={this.handleBookmark} />
               </div>
             )}
-            exact
-            path="/bookmark"
+            exact path="/bookmark"
           />
         </Template>
       </div>
