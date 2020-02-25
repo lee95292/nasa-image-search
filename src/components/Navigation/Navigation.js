@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import { Navbar, NavDropdown, Nav, FormControl, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -58,10 +59,7 @@ class Navigation extends Component {
                 <NavDropdown.Item onClick={this.handleFilter} name="keyword">
                   키워드
                 </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item onClick={this.handleFilter}>
-                  결과 내 검색
-                </NavDropdown.Item>
+              
               </NavDropdown>
               <FormControl
                 onChange={this.handleChange}
