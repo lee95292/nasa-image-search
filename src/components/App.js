@@ -43,12 +43,12 @@ class App extends Component {
     if (index < 0) {
       console.log("handleBookmark push " + item);
       bookmark.push(item);
-	  alert('북마크에 추가되었습니다.');
+	  alert('Bookmarked');
     } else {
       // route가 bookmark일때만 지우는 조건 : 현재 home탭에서도 북마크 삭제 가능
       console.log(item + "removed");
       bookmark.splice(index, 1);
-	  alert('북마크에서 삭제되었습니다');
+	  alert('Bookmark deleted');
     }
 
     this.setState({
@@ -98,7 +98,7 @@ class App extends Component {
         this.setState({
           items: res.data.collection.items.slice(0, 10),
           query: {
-            ...this.state,
+            ...this.state.query,
             [filter]: input
           },
           page: 1,
@@ -112,7 +112,6 @@ class App extends Component {
 
   loadInitialImageItems() {
     const { query, page } = this.state;
-
     storageCollection = JSON.parse(localStorage.getItem("collection"));
 
     if (storageCollection != null) {
@@ -160,7 +159,7 @@ class App extends Component {
 
   render() {
     const { items, total_hit, bookmark } = this.state;
-
+    console.log(this.state.query,'query')
     return (
       <div>
         <Template>
@@ -169,7 +168,7 @@ class App extends Component {
             exact path="/"
             render={() => (
               <div>
-                검색 결과 : {total_hit}개
+                 {total_hit} Search result
                 <ImageList items={items} onBookmark={this.handleBookmark} />
                 {total_hit > items.length && (
                   <div className="page-add" onMouseOver={this.handlePagination}>
@@ -182,7 +181,7 @@ class App extends Component {
           <Route
             render={() => (
               <div>
-                북마크 : {bookmark.length}개
+                {bookmark.length} Bookmarks
                 <ImageList items={bookmark} onBookmark={this.handleBookmark} />
               </div>
             )}

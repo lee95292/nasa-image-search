@@ -1,18 +1,28 @@
 
 import React, { Component } from "react";
 import { Navbar, NavDropdown, Nav, FormControl, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./Navigation.css";
 
-const filterMapper = {};
-const activeStyle = {
-  backgroundColor:'gray',
-  textDecoration:'underline',
-}
+const navActiveStyle = {
+  backgroundColor: 'gray',
+  textDecoration: 'underline',
+  color:'white'
+};
 
-filterMapper["total"] = "Total";
-filterMapper["title"] = "Title";
-filterMapper["keyword"] = "Keyword";
+const navStyle = {
+  color: 'black',
+  margin: '1rem 1rem 1rem 1rem',
+  padding: '7px',
+  borderRadius: '0.6rem'
+};
+
+const filterMapper = {
+  total:"Total",
+  title:"Title",
+  keyword:"Keyword"
+};
+
 class Navigation extends Component {
   state = {
     filter: "total",
@@ -38,33 +48,22 @@ class Navigation extends Component {
       <div>
         <Navbar bg="light" expand="lg">
           {/* <Navbar.Brand href="#home">Nasa</Navbar.Brand> */}
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Toggle aria-controls="basic-navbar-nav" style={{marginBottom: '10px'}}/>
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav variant="pills" defaultActiveKey="/" className="mr-auto">
-              <Nav.Item>
-                <Nav.Link>
-                  <Link exact to="/">
-                    Home
-                  </Link>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link>
-                  <Link exact to="/bookmark">
-                    Bookmark
-                  </Link>
-                </Nav.Link>
-              </Nav.Item>
-            </Nav>
+            <NavLink exact to="/" style={navStyle} activeStyle={navActiveStyle}>
+              Home
+            </NavLink>
+            <NavLink exact to="/bookmark" style={navStyle} activeStyle={navActiveStyle}>
+              Bookmark
+            </NavLink>
+            <p></p>
             <div className="inline">
               <NavDropdown title={filterMapper[filter]} id="basic-nav-dropdown">
-                {
-                  Object.keys(filterMapper).map( (filter) => 
+                {Object.keys(filterMapper).map((filter) =>
                     <NavDropdown.Item onClick={this.handleFilter} name={filter}>
                       {filterMapper[filter]}
                     </NavDropdown.Item>
-
-                )}
+                  )}
               </NavDropdown>
               <FormControl
                 onChange={this.handleChange}
