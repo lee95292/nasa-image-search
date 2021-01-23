@@ -23,9 +23,10 @@ If it has too many search result, you can load more image. just hover a point at
 ## Need contribute
 
 ---
-* page title
+* page title [ v ] 
 * image auto loading (at mouse hover => scroll end) 
 * search by date filter
+* bookmark autoremove modal rather than alert
 * multi search filter
-* \
-[home, bookmark\] tab highligt
+* \[home, bookmark\] tab highligt [ v ]
+* keyword search by button click
