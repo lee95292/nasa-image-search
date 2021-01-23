@@ -1,6 +1,6 @@
 
 import React, { Component } from "react";
-import { Navbar, NavDropdown, Nav, FormControl, Button } from "react-bootstrap";
+import { Navbar, NavDropdown, FormControl, Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import "./Navigation.css";
 
@@ -17,33 +17,25 @@ const navStyle = {
   borderRadius: '0.6rem'
 };
 
-const filterMapper = {
-  total:"Total",
+const filterNameMapper = {
   title:"Title",
-  keyword:"Keyword"
+  total:"Total",
+  keyword:"Keywords",
+  year_start:"Year start",
+  year_end:"Year end"
 };
 
 class Navigation extends Component {
-  state = {
-    filter: "total",
-    input: ""
-  };
-  handleFilter = e => {
-    this.setState({ filter: e.target.name });
-  };
   handleKeyPress = e => {
-    const { filter, input } = this.state;
+    const { onSubmit } = this.props;
     if (e.key === "Enter") {
-      this.props.onSubmit(filter, input);
-      console.log(input);
+      onSubmit();
     }
   };
-  handleChange = e => {
-    this.setState({ input: e.target.value });
-  };
+  
   render() {
-    const { filter, input } = this.state;
-    const { onSubmit } = this.props;
+    const { onSubmit, handleChange, handleFilter, activeFilter, query } = this.props;
+    console.log('Navigation, this.props', this.props);
     return (
       <div>
         <Navbar bg="light" expand="lg">
@@ -58,15 +50,16 @@ class Navigation extends Component {
             </NavLink>
             <p></p>
             <div className="inline">
-              <NavDropdown title={filterMapper[filter]} id="basic-nav-dropdown">
-                {Object.keys(filterMapper).map((filter) =>
-                    <NavDropdown.Item onClick={this.handleFilter} name={filter}>
-                      {filterMapper[filter]}
+              <NavDropdown title={filterNameMapper[activeFilter]} id="basic-nav-dropdown">
+                {Object.keys(query).map((filter) =>
+                    <NavDropdown.Item onClick={handleFilter} name={filter}>
+                      {filterNameMapper[filter]}
                     </NavDropdown.Item>
                   )}
               </NavDropdown>
               <FormControl
-                onChange={this.handleChange}
+                value={query[activeFilter]}
+                onChange={handleChange}
                 onKeyPress={this.handleKeyPress}
                 type="text"
                 placeholder="Search"
@@ -74,13 +67,22 @@ class Navigation extends Component {
               />
               <Button
                 variant="outline-success"
-                onClick={() => onSubmit(filter, input)}
+                onClick={onSubmit}
               >
                 Search
               </Button>
             </div>
           </Navbar.Collapse>
         </Navbar>
+        
+        {/* TODO: 디자인하기, 쿼리 지우기 */}
+        {Object.keys(query).map(filter => 
+          query[filter] && (
+            <div>
+              {filter+ ": " + query[filter]}
+            </div>
+          )
+        )}
       </div>
     );
   }

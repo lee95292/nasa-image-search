@@ -11,24 +11,42 @@ const nasaAPIRUL = "https://images-api.nasa.gov/";
 let storageCollection = null;
 let storageBookmark = null;
 
-const queryMapper = {};
-queryMapper["title"] = "title";
-queryMapper["total"] = "q";
-queryMapper["keyword"] = "keywords";
+const filterMapper = {
+  title:"title",
+  total:"q",
+  keyword:"keywords",
+  year_start:"year_start",
+  year_end:"year_end"
+};
 
 class App extends Component {
   state = {
     items: [],
     page: 1,
     bookmark: [],
+    activeFilter: 'total',
     query: {
       total: "moon",
       keyword: "",
-      title: ""
+      title: "",
+      year_start: "",
+      year_end: "",
     },
     total_hit: 0
   };
 
+  handleFilter = e => {
+    this.setState({ activeFilter: e.target.name });
+  };
+  handleChange = e => {
+    const { activeFilter, query } = this.state; 
+    const input = e.target.value;
+    this.setState({ query: {
+        ...query,
+        [activeFilter]: input
+      } 
+    });
+  };
   shouldComponentUpdate(nextState) {
     const bookmark = this.state.bookmark !== nextState.bookmark;
     const items = this.state.items !== nextState.items;
@@ -63,7 +81,7 @@ class App extends Component {
     // 새로 요청하여 업데이트해야하는 경우
     if (
       page % 10 === 9 && // localstorage에 저장된 마지막 페이지
-      storageCollection.links != null && // REST에서 제공되는 좌표 X
+      storageCollection.links !== null && // REST에서 제공되는 좌표 X
       storageCollection.links[storageCollection.links.length - 1].rel != "prev" // 마지막 페이지가 아님
     ) {
       axios.get(storageCollection.links[0].href).then(res => {
@@ -89,17 +107,19 @@ class App extends Component {
     }
   };
 
-  handleSearch = (filter, input) => {
-    console.log("test search box");
+  handleSearch = (searchQuery = { total: 'moon', year_start: 2000 }) => {
+    const queryString = Object.keys(searchQuery).map( queryName => 
+        { return searchQuery[queryName] ? filterMapper[queryName] + "=" + searchQuery[queryName] + "&" : ""}
+      ).join("");
     axios
-      .get(nasaAPIRUL + "search?" + queryMapper[filter] + "=" + input)
+      .get(nasaAPIRUL + "search?" + queryString)
       .then(res => {
         localStorage.setItem("collection", JSON.stringify(res.data.collection));
         this.setState({
           items: res.data.collection.items.slice(0, 10),
           query: {
             ...this.state.query,
-            [filter]: input
+            ...searchQuery
           },
           page: 1,
           total_hit: res.data.collection.metadata.total_hits
@@ -158,12 +178,19 @@ class App extends Component {
   }
 
   render() {
-    const { items, total_hit, bookmark } = this.state;
+    const { items, total_hit, bookmark, query, activeFilter } = this.state;
     console.log(this.state.query,'query')
     return (
       <div>
         <Template>
-          <Navigation total_hit={total_hit} onSubmit={this.handleSearch} />
+          <Navigation  
+            onSubmit={() => this.handleSearch(query)} 
+            handleFilter={this.handleFilter}
+            handleChange={this.handleChange}
+            activeFilter={activeFilter} 
+            query={query}
+            total_hit={total_hit}
+          />
           <Route
             exact path="/"
             render={() => (
