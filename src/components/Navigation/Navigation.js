@@ -5,10 +5,14 @@ import { Link } from "react-router-dom";
 import "./Navigation.css";
 
 const filterMapper = {};
+const activeStyle = {
+  backgroundColor:'gray',
+  textDecoration:'underline',
+}
 
-filterMapper["total"] = "전체";
-filterMapper["title"] = "제목";
-filterMapper["keyword"] = "키워드";
+filterMapper["total"] = "Total";
+filterMapper["title"] = "Title";
+filterMapper["keyword"] = "Keyword";
 class Navigation extends Component {
   state = {
     filter: "total",
@@ -36,30 +40,31 @@ class Navigation extends Component {
           {/* <Navbar.Brand href="#home">Nasa</Navbar.Brand> */}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-              <Nav.Link>
-                <Link exact to="/">
-                  Home
-                </Link>
-              </Nav.Link>
-              <Nav.Link>
-                <Link exact to="/bookmark">
-                  Bookmark
-                </Link>
-              </Nav.Link>
+            <Nav variant="pills" defaultActiveKey="/" className="mr-auto">
+              <Nav.Item>
+                <Nav.Link>
+                  <Link exact to="/">
+                    Home
+                  </Link>
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link>
+                  <Link exact to="/bookmark">
+                    Bookmark
+                  </Link>
+                </Nav.Link>
+              </Nav.Item>
             </Nav>
             <div className="inline">
               <NavDropdown title={filterMapper[filter]} id="basic-nav-dropdown">
-                <NavDropdown.Item onClick={this.handleFilter} name="total">
-                  전체
-                </NavDropdown.Item>
-                <NavDropdown.Item onClick={this.handleFilter} name="title">
-                  제목
-                </NavDropdown.Item>
-                <NavDropdown.Item onClick={this.handleFilter} name="keyword">
-                  키워드
-                </NavDropdown.Item>
-              
+                {
+                  Object.keys(filterMapper).map( (filter) => 
+                    <NavDropdown.Item onClick={this.handleFilter} name={filter}>
+                      {filterMapper[filter]}
+                    </NavDropdown.Item>
+
+                )}
               </NavDropdown>
               <FormControl
                 onChange={this.handleChange}
