@@ -27,3 +27,5 @@ If it has too many search result, you can load more image. just hover a point at
 * image auto loading (at mouse hover => scroll end) 
 * search by date filter
 * multi search filter
+* \
+[home, bookmark\] tab highligt
