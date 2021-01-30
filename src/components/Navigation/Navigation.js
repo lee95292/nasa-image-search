@@ -10,6 +10,16 @@ const navActiveStyle = {
   color:'white'
 };
 
+const queryBlockStyle = {
+  backgroundColor: 'gray',
+  padding: '7px',
+  margin: '1px 1px 1px 1px',
+  color: 'white',
+  borderRadius: '0.8rem',
+  button:{
+    display:'none'
+  }
+}
 const navStyle = {
   color: 'black',
   margin: '1rem 1rem 1rem 1rem',
@@ -34,7 +44,7 @@ class Navigation extends Component {
   };
   
   render() {
-    const { onSubmit, handleChange, handleFilter, activeFilter, query } = this.props;
+    const { onSubmit, handleChange, handleFilter, activeFilter, query, removeQuery } = this.props;
     console.log('Navigation, this.props', this.props);
     return (
       <div>
@@ -65,24 +75,31 @@ class Navigation extends Component {
                 placeholder="Search"
                 className="mr-sm-2"
               />
-              <Button
-                variant="outline-success"
-                onClick={onSubmit}
-              >
-                Search
-              </Button>
+              
             </div>
           </Navbar.Collapse>
+          <div style={{marginTop:'10px'}}>
+          {/* TODO: 디자인하기, 쿼리 지우기 */}
+          {Object.keys(query).map(filter => 
+            query[filter] && (
+              <span
+                style={queryBlockStyle}
+                name={filter}
+                >
+                {filter+ ": " + query[filter]} 
+                <button name={filter} onClick={removeQuery}>X</button>
+              </span>
+            )
+          )}
+         </div>
+         <Button
+          variant="outline-success"
+          onClick={onSubmit}
+          >
+          Search
+        </Button>
         </Navbar>
-        
-        {/* TODO: 디자인하기, 쿼리 지우기 */}
-        {Object.keys(query).map(filter => 
-          query[filter] && (
-            <div>
-              {filter+ ": " + query[filter]}
-            </div>
-          )
-        )}
+       
       </div>
     );
   }

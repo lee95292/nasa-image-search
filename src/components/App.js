@@ -38,6 +38,15 @@ class App extends Component {
   handleFilter = e => {
     this.setState({ activeFilter: e.target.name });
   };
+
+  removeQuery = e => {
+    this.setState({
+      query:{
+        ...this.state.query,
+        [e.target.name]: ""
+      }
+    })
+  }
   handleChange = e => {
     const { activeFilter, query } = this.state; 
     const input = e.target.value;
@@ -187,6 +196,7 @@ class App extends Component {
             onSubmit={() => this.handleSearch(query)} 
             handleFilter={this.handleFilter}
             handleChange={this.handleChange}
+            removeQuery={this.removeQuery}
             activeFilter={activeFilter} 
             query={query}
             total_hit={total_hit}
