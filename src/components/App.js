@@ -47,6 +47,7 @@ class App extends Component {
       }
     })
   }
+
   handleChange = e => {
     const { activeFilter, query } = this.state; 
     const input = e.target.value;
@@ -116,7 +117,7 @@ class App extends Component {
     }
   };
 
-  handleSearch = (searchQuery = { total: 'moon', year_start: 2000 }) => {
+  handleSearch = (searchQuery = { total: 'moon' }) => {
     const queryString = Object.keys(searchQuery).map( queryName => 
         { return searchQuery[queryName] ? filterMapper[queryName] + "=" + searchQuery[queryName] + "&" : ""}
       ).join("");
@@ -225,7 +226,7 @@ class App extends Component {
                 <ImageList items={bookmark} onBookmark={this.handleBookmark} />
               </div>
             )}
-            exact path="/bookmark"
+            path="/bookmark"
           />
         </Template>
       </div>
