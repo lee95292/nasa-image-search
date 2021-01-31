@@ -191,7 +191,10 @@ class App extends Component {
     console.log(this.state.query,'query')
     return (
       <div>
+      
         <Template>
+        <div className="content--canvas">
+          </div>
           <Navigation  
             onSubmit={() => this.handleSearch(query)} 
             handleFilter={this.handleFilter}

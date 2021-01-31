@@ -5,7 +5,7 @@ class Template extends Component {
   render() {
     return (
       <div className="template">
-        <h1>Nasa Image Search Application</h1> <sub>powered by NASA API</sub>
+        <h1 style={{color:"white"}}>Nasa Image Search Application</h1> <sub>powered by NASA API</sub>
         <BrowserRouter>{this.props.children}</BrowserRouter>
       </div>
     );

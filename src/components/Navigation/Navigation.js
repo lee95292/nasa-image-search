@@ -2,29 +2,12 @@
 import React, { Component } from "react";
 import { Navbar, NavDropdown, FormControl, Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import "./Navigation.css";
+import styles from "./Navigation.module.css";
 
 const navActiveStyle = {
   backgroundColor: 'gray',
   textDecoration: 'underline',
   color:'white'
-};
-
-const queryBlockStyle = {
-  backgroundColor: 'gray',
-  padding: '7px',
-  margin: '1px 1px 1px 1px',
-  color: 'white',
-  borderRadius: '0.8rem',
-  button:{
-    display:'none'
-  }
-}
-const navStyle = {
-  color: 'black',
-  margin: '1rem 1rem 1rem 1rem',
-  padding: '7px',
-  borderRadius: '0.6rem'
 };
 
 const filterNameMapper = {
@@ -35,11 +18,6 @@ const filterNameMapper = {
   year_end:"Year end"
 };
 
-const removeQueryBtn = {
-  border:'none',
-  background: 'none',
-  color: 'black',
-}
 class Navigation extends Component {
   handleKeyPress = e => {
     const { onSubmit } = this.props;
@@ -50,59 +28,59 @@ class Navigation extends Component {
   
   render() {
     const { onSubmit, handleChange, handleFilter, activeFilter, query, removeQuery } = this.props;
+    console.log(styles);
     return (
-      <div>
-        <Navbar bg="light" expand="lg">
-          {/* <Navbar.Brand href="#home">Nasa</Navbar.Brand> */}
-          <Navbar.Toggle aria-controls="basic-navbar-nav" style={{marginBottom: '10px'}}/>
-          <Navbar.Collapse id="basic-navbar-nav">
-            <NavLink exact to="/" style={navStyle} activeStyle={navActiveStyle}>
+      <div className={styles.navigation}>
+        <Navbar bg="light" expand="sm">
+            <NavLink exact to="/" className={styles.navStyle} activeStyle={navActiveStyle}>
               Home
             </NavLink>
-            <NavLink exact to="/bookmark" style={navStyle} activeStyle={navActiveStyle}>
+            <NavLink exact to="/bookmark" className={styles.navStyle} activeStyle={navActiveStyle}>
               Bookmark
-            </NavLink>
-            <p></p>
-            <div className="inline">
-              <NavDropdown title={filterNameMapper[activeFilter]} id="basic-nav-dropdown">
-                {Object.keys(query).map((filter) =>
-                    <NavDropdown.Item onClick={handleFilter} name={filter}>
-                      {filterNameMapper[filter]}
-                    </NavDropdown.Item>
-                  )}
-              </NavDropdown>
-              <FormControl
-                value={query[activeFilter]}
-                onChange={handleChange}
-                onKeyPress={this.handleKeyPress}
-                type="text"
-                placeholder="Search"
-                className="mr-sm-2"
-              />
-              
-            </div>
-          </Navbar.Collapse>
-          <div style={{marginTop:'10px'}}>
-          {/* TODO: 디자인하기, 쿼리 지우기 */}
-          {Object.keys(query).map(filter => 
-            query[filter] && (
-              <span
-                style={queryBlockStyle}
-                name={filter}
-                >
-                {filter+ ": " + query[filter]} 
-                <button className="removeQueryBtn" name={filter} onClick={removeQuery}>X</button>
-              </span>
-            )
-          )}
-         </div>
-         <Button
-          variant="outline-success"
-          onClick={onSubmit}
-          >
-          Search
-        </Button>
+            </NavLink> 
+            <NavLink exact to="/about" className={styles.navStyle} activeStyle={navActiveStyle}>
+              About
+            </NavLink> 
         </Navbar>
+        <div>
+         <div className={styles.searchBox}>
+          <NavDropdown title={filterNameMapper[activeFilter]} id="basic-nav-dropdown">
+              {Object.keys(query).map((filter) =>
+                <NavDropdown.Item onClick={handleFilter} name={filter}>
+                {filterNameMapper[filter]}
+                  </NavDropdown.Item>
+                )}
+            </NavDropdown>
+            <FormControl
+              value={query[activeFilter]}
+              onChange={handleChange}
+              onKeyPress={this.handleKeyPress}
+              type="text"
+              placeholder="Search"
+              className="mr-sm-2"
+            />
+            <Button
+              variant="outline-success"
+              onClick={onSubmit}
+              >
+              Search
+            </Button>
+         </div>
+        <div style={{marginTop:'10px'}}>
+        {Object.keys(query).map(filter => 
+          query[filter] && (
+            <span
+            className={styles.queryBlock}
+            name={filter}
+            >
+              <sub >({filter})</sub>
+              {query[filter]} 
+              <button className={styles.removeQueryBtn} name={filter} onClick={removeQuery}>X</button>
+            </span>
+          )
+          )}
+       </div>
+       </div>
        
       </div>
     );
