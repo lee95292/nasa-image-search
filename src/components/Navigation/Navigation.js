@@ -35,6 +35,11 @@ const filterNameMapper = {
   year_end:"Year end"
 };
 
+const removeQueryBtn = {
+  border:'none',
+  background: 'none',
+  color: 'black',
+}
 class Navigation extends Component {
   handleKeyPress = e => {
     const { onSubmit } = this.props;
@@ -45,7 +50,6 @@ class Navigation extends Component {
   
   render() {
     const { onSubmit, handleChange, handleFilter, activeFilter, query, removeQuery } = this.props;
-    console.log('Navigation, this.props', this.props);
     return (
       <div>
         <Navbar bg="light" expand="lg">
@@ -87,7 +91,7 @@ class Navigation extends Component {
                 name={filter}
                 >
                 {filter+ ": " + query[filter]} 
-                <button name={filter} onClick={removeQuery}>X</button>
+                <button className="removeQueryBtn" name={filter} onClick={removeQuery}>X</button>
               </span>
             )
           )}

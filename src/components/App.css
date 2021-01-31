@@ -11,3 +11,11 @@
   border: 1px solid;
   border-radius: 1rem;
 }
+
+#root{
+  height: 100%;
+  background-color:gray;
+  /* background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(https://media.giphy.com/media/xUPJUGOaPlUy5aSwvK/giphy-downsized.gif); */
+}

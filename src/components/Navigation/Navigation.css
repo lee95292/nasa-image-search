@@ -2,3 +2,13 @@
   display: flex;
   justify-content: right;
 }
+
+.removeQueryBtn{
+  border:none;
+  background: none;
+  color: black;
+}
+
+.removeQueryBtn:hover{
+  color:white;
+}
