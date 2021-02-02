@@ -111,7 +111,7 @@ class App extends Component {
       });
     }
 
-    if (items.length < storageCollection.items.length) {
+    if (items && items.length < storageCollection.items.length) {
       this.setState({
         page: page + 1,
         items: items.concat(
