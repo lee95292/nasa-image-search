@@ -25,15 +25,14 @@ If it has too many search result, you can load more image. just hover a point at
 ---
 
 ### features 
-
 * navigation & title design
 * fix search when scroll up.
+* use datepicker
 * image loding icon
-* image auto loading (at mouse hover => scroll end) 
 * bookmark remove modal rather than alert
 * keyword search by button click
 
 ### dev design
 
-* using redux 
+* using redux (!important) 
 * using react hook
