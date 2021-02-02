@@ -45,10 +45,10 @@ class ImageItem extends Component {
         ..fold
       </span>
     ) : (
-      <span className="foldable" onClick={this.handleVervose}>
-        more..
-      </span>
-    );
+        <span className="foldable" onClick={this.handleVervose}>
+          more..
+        </span>
+      );
 
     let numOfdisplayKeyword = 0;
     let numOfKeyword = 0;
@@ -73,10 +73,10 @@ class ImageItem extends Component {
           ..fold
         </span>
       ) : (
-        <span className="foldable" onClick={this.handleKeywordVervose}>
-          more..
-        </span>
-      );
+          <span className="foldable" onClick={this.handleKeywordVervose}>
+            more..
+          </span>
+        );
 
     return (
       <div className="image-item" onDoubleClick={() => onBookmark(item)}>

@@ -1,18 +1,31 @@
 .searchBox {
-  flex:5;
   display: flex;
-  justify-content: right;
+  background-color: white;
+}
+.searchContainer {
+  position: fixed;
+  justify-content: center;
+
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  width: 100%;
+  height: fit-content;
 }
 
-.removeQueryBtn{
-  border:none;
+.filterBox{
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.removeQueryBtn {
+  border: none;
   background: none;
   color: black;
 }
 
 .navigation {
-  background-color: rgba( 255, 255, 255, 0.5 );
-  @media(max-width: 768px){
+  background-color: rgba(255, 255, 255, 0.5);
+  @media (max-width: 768px) {
     margin: 1rem;
   }
 }
@@ -30,8 +43,8 @@
   border-radius: 0.8rem;
 }
 
-.navActive{
+.navActive {
   background-color: gray;
   text-decoration: underline;
-  color:white;
+  color: white;
 }

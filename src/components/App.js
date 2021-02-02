@@ -12,15 +12,15 @@ let storageCollection = null;
 let storageBookmark = null;
 
 const filterMapper = {
-  title:"title",
-  total:"q",
-  keyword:"keywords",
-  year_start:"year_start",
-  year_end:"year_end"
+  title: "title",
+  total: "q",
+  keyword: "keywords",
+  year_start: "year_start",
+  year_end: "year_end"
 };
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       items: [],
@@ -46,7 +46,7 @@ class App extends Component {
 
   removeQuery = e => {
     this.setState({
-      query:{
+      query: {
         ...this.state.query,
         [e.target.name]: ""
       }
@@ -54,12 +54,13 @@ class App extends Component {
   }
 
   handleChange = e => {
-    const { activeFilter, query } = this.state; 
+    const { activeFilter, query } = this.state;
     const input = e.target.value;
-    this.setState({ query: {
+    this.setState({
+      query: {
         ...query,
         [activeFilter]: input
-      } 
+      }
     });
   };
   shouldComponentUpdate(nextState) {
@@ -76,12 +77,12 @@ class App extends Component {
     if (index < 0) {
       console.log("handleBookmark push " + item);
       bookmark.push(item);
-	  alert('Bookmarked');
+      alert('Bookmarked');
     } else {
       // route가 bookmark일때만 지우는 조건 : 현재 home탭에서도 북마크 삭제 가능
       console.log(item + "removed");
       bookmark.splice(index, 1);
-	  alert('Bookmark deleted');
+      alert('Bookmark deleted');
     }
 
     this.setState({
@@ -123,9 +124,8 @@ class App extends Component {
   };
 
   handleSearch = (searchQuery = { total: 'moon' }) => {
-    const queryString = Object.keys(searchQuery).map( queryName => 
-        { return searchQuery[queryName] ? filterMapper[queryName] + "=" + searchQuery[queryName] + "&" : ""}
-      ).join("");
+    const queryString = Object.keys(searchQuery).map(queryName => { return searchQuery[queryName] ? filterMapper[queryName] + "=" + searchQuery[queryName] + "&" : "" }
+    ).join("");
     axios
       .get(nasaAPIRUL + "search?" + queryString)
       .then(res => {
@@ -191,30 +191,30 @@ class App extends Component {
     this.loadInitialImageItems();
     this.loadInitailBookmarkItems();
     console.log('this.cardListRef', this.cardListRef);
-    if(this.cardListRef){
-        this.scrollObserver = new IntersectionObserver( ([entry]) => {
-          if(entry.isIntersecting){
-            this.handlePagination();
-          }
-        }, {threshold: 0.1});
-        this.scrollObserver.observe(this.cardListRef.current);
+    if (this.cardListRef) {
+      this.scrollObserver = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          this.handlePagination();
+        }
+      }, { threshold: 0.1 });
+      this.scrollObserver.observe(this.cardListRef.current);
     }
   }
 
   render() {
     const { items, total_hit, bookmark, query, activeFilter } = this.state;
-    const { offsetHeight } = document.body; 
+    const { offsetHeight } = document.body;
     return (
       <div >
         <Template>
-        <div className="content--canvas">
+          <div className="content--canvas">
           </div>
-          <Navigation  
-            onSubmit={() => this.handleSearch(query)} 
+          <Navigation
+            onSubmit={() => this.handleSearch(query)}
             handleFilter={this.handleFilter}
             handleChange={this.handleChange}
             removeQuery={this.removeQuery}
-            activeFilter={activeFilter} 
+            activeFilter={activeFilter}
             query={query}
             total_hit={total_hit}
           />
@@ -222,7 +222,7 @@ class App extends Component {
             exact path="/"
             render={() => (
               <div>
-                 {total_hit} Search result
+                {total_hit} Search result
                 <ImageList items={items} onBookmark={this.handleBookmark} />
                 {total_hit > items.length && (
                   <div className="page-add" onMouseOver={this.handlePagination}>
