@@ -20,20 +20,25 @@ const filterMapper = {
 };
 
 class App extends Component {
-  state = {
-    items: [],
-    page: 1,
-    bookmark: [],
-    activeFilter: 'total',
-    query: {
-      total: "moon",
-      keyword: "",
-      title: "",
-      year_start: "",
-      year_end: "",
-    },
-    total_hit: 0
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      items: [],
+      page: 1,
+      bookmark: [],
+      activeFilter: 'total',
+      query: {
+        total: "moon",
+        keyword: "",
+        title: "",
+        year_start: "",
+        year_end: "",
+      },
+      total_hit: 0
+    };
+    this.cardListRef = React.createRef();
+    this.scrollObserver = null;
+  }
 
   handleFilter = e => {
     this.setState({ activeFilter: e.target.name });
@@ -185,14 +190,22 @@ class App extends Component {
   componentDidMount() {
     this.loadInitialImageItems();
     this.loadInitailBookmarkItems();
+    console.log('this.cardListRef', this.cardListRef);
+    if(this.cardListRef){
+        this.scrollObserver = new IntersectionObserver( ([entry]) => {
+          if(entry.isIntersecting){
+            this.handlePagination();
+          }
+        }, {threshold: 0.1});
+        this.scrollObserver.observe(this.cardListRef.current);
+    }
   }
 
   render() {
     const { items, total_hit, bookmark, query, activeFilter } = this.state;
-    console.log(this.state.query,'query')
+    const { offsetHeight } = document.body; 
     return (
-      <div>
-      
+      <div >
         <Template>
         <div className="content--canvas">
           </div>
@@ -229,6 +242,11 @@ class App extends Component {
             path="/bookmark"
           />
         </Template>
+        <div ref={this.cardListRef} style={{
+          // display:'none',
+          position: 'absolute',
+          bottom: - offsetHeight + 1000,
+        }} > ---</div>
       </div>
     );
   }
