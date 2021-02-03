@@ -32,6 +32,7 @@ If it has too many search result, you can load more image. just hover a point at
 * image loding icon
 * bookmark remove modal rather than alert
 * keyword search by button click
+* card margin 
 
 ### dev design
 
