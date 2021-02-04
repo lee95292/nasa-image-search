@@ -1,25 +1,43 @@
-.searchBox {
-  display: flex;
-  background-color: white;
-}
 .searchContainer {
   position: fixed;
-  justify-content: center;
+  display: flex;
 
   top: 0;
   left: 0;
+  padding: 20px 150px 20px 150px;
   z-index: 1;
-
+  
   width: 100%;
   height: fit-content;
+  background-color: hsla(199, 80%, 10%, 0.7);
+}
+
+.searchBox {
+  display: flex;
+  flex: 2;
+}
+.searchInput{
+  border: 6px solid hsla(110, 61%, 46%, 0.5);
+  border-radius: 1px;
+  height: 40px;
 }
 
 .filterBox{
+  flex: 2;
   background-color: rgba(255, 255, 255, 0.5);
+
+  padding-top: 10px;
+  text-align: center;
+  
+  border: 1px solid gray;
+  border-radius: 3px;
 }
 .removeQueryBtn {
   border: none;
   background: none;
+  color: gray;
+}
+.removeQueryBtn:hover{
   color: black;
 }
 

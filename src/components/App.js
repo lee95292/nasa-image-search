@@ -101,7 +101,6 @@ class App extends Component {
       storageCollection.links[storageCollection.links.length - 1].rel != "prev" // 마지막 페이지가 아님
     ) {
       axios.get(storageCollection.links[0].href).then(res => {
-        console.log(res);
         const nextpageItems = res.data.collection.items;
 
         storageCollection = JSON.parse(localStorage.getItem("collection"));
@@ -112,7 +111,7 @@ class App extends Component {
       });
     }
 
-    if (items && items.length < storageCollection.items.length) {
+    if (items.length < storageCollection.items.length) {
       this.setState({
         page: page + 1,
         items: items.concat(
@@ -193,7 +192,8 @@ class App extends Component {
     console.log('this.cardListRef', this.cardListRef);
     if (this.cardListRef) {
       this.scrollObserver = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
+        console.log(this.state, 'this.state');
+        if (entry.isIntersecting && this.state.items) {
           this.handlePagination();
         }
       }, { threshold: 0.1 });
@@ -245,7 +245,7 @@ class App extends Component {
         <div ref={this.cardListRef} style={{
           // display:'none',
           position: 'absolute',
-          bottom: - offsetHeight + 1000,
+          bottom: - offsetHeight + 600,
         }} > ---</div>
       </div>
     );

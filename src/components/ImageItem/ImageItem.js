@@ -80,7 +80,7 @@ class ImageItem extends Component {
 
     return (
       <div className="image-item" onDoubleClick={() => onBookmark(item)}>
-        <Card style={{ width: "18rem" }}>
+        <Card style={{ width: "18rem", marginBottom: "2rem"}}>
           <Card.Img variant="top" src={imageSource} />
           <Card.Body>
             <Card.Title>{item.data[0].title}</Card.Title>

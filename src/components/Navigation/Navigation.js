@@ -17,6 +17,27 @@ const filterNameMapper = {
   year_end: "Year end",
 };
 
+const placeholderMapper = {
+  title: "Moon",
+  total: "First foorprint at the moon.",
+  keyword: "Footprint",
+  year_start: "1990",
+  year_end: "2021",
+};
+
+const isEmptyQuery = (q) => {
+  let empty = true;
+  for (const key of Object.keys(q)) {
+    if (q[key]) {
+      empty = false;
+      break;
+    }
+  }
+  return empty;
+};
+
+const queryEmptyMessage = 'queryEmptyMessage'
+
 class Navigation extends Component {
   handleKeyPress = (e) => {
     const { onSubmit } = this.props;
@@ -64,31 +85,9 @@ class Navigation extends Component {
           </NavLink>
         </Navbar>
         <div className={styles.searchContainer}>
-          <div className={styles.searchBox}>
-            <NavDropdown
-              title={filterNameMapper[activeFilter]}
-              id="basic-nav-dropdown"
-            >
-              {Object.keys(query).map((filter) => (
-                <NavDropdown.Item onClick={handleFilter} name={filter}>
-                  {filterNameMapper[filter]}
-                </NavDropdown.Item>
-              ))}
-            </NavDropdown>
-            <FormControl
-              value={query[activeFilter]}
-              onChange={handleChange}
-              onKeyPress={this.handleKeyPress}
-              type="text"
-              placeholder="Search"
-              className="mr-sm-2"
-            />
-            <Button variant="outline-success" onClick={onSubmit}>
-              Search
-            </Button>
-          </div>
           <div className={styles.filterBox}>
-            {Object.keys(query).map(
+            { isEmptyQuery(query) ? 
+            queryEmptyMessage : Object.keys(query).map(
               (filter) =>
                 query[filter] && (
                   <span className={styles.queryBlock} name={filter}>
@@ -104,6 +103,29 @@ class Navigation extends Component {
                   </span>
                 )
             )}
+          </div>
+          <div className={styles.searchBox}>
+            <NavDropdown
+              title={filterNameMapper[activeFilter]}
+              id="basic-nav-dropdown"
+            >
+              {Object.keys(query).map((filter) => (
+                <NavDropdown.Item onClick={handleFilter} name={filter}>
+                  {filterNameMapper[filter]}
+                </NavDropdown.Item>
+              ))}
+            </NavDropdown>
+            <input
+              className={styles.searchInput}
+              value={query[activeFilter]}
+              onChange={handleChange}
+              onKeyPress={this.handleKeyPress}
+              type="text"
+              placeholder={placeholderMapper[activeFilter]}
+            />
+            <Button variant="outline-success" onClick={onSubmit}>
+              Search
+            </Button>
           </div>
         </div>
       </div>
