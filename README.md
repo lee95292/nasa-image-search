@@ -27,10 +27,12 @@ If it has too many search result, you can load more image. just hover a point at
 ### features 
 * navigation & title design
 * fix search when scroll up.
+* mobile version background
 * use datepicker
 * image loding icon
 * bookmark remove modal rather than alert
 * keyword search by button click
+* card margin 
 
 ### dev design
 
