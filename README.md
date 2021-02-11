@@ -17,22 +17,21 @@ Bookmark list saved in your browser.
 
 ### Auto loading
 
-If it has too many search result, you can load more image. just hover a point at \[more\] Area 
-
+Just by scroll
 
 ## Need contribute
 
 ---
 
 ### features 
-* navigation & title design
 * fix search when scroll up.
 * mobile version background
 * use datepicker
 * image loding icon
 * bookmark remove modal rather than alert
 * keyword search by button click
-* card margin 
+* card page: talk(comment) & vote at card page! 
+* moon, mars tab: weather, atomospheric pressure, etc..
 
 ### dev design
 

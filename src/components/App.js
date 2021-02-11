@@ -16,7 +16,7 @@ const filterMapper = {
   total: "q",
   keyword: "keywords",
   year_start: "year_start",
-  year_end: "year_end"
+  year_end: "year_end",
 };
 
 class App extends Component {
@@ -26,7 +26,7 @@ class App extends Component {
       items: [],
       page: 1,
       bookmark: [],
-      activeFilter: 'total',
+      activeFilter: "total",
       query: {
         total: "moon",
         keyword: "",
@@ -34,33 +34,33 @@ class App extends Component {
         year_start: "",
         year_end: "",
       },
-      total_hit: 0
+      total_hit: 0,
     };
     this.cardListRef = React.createRef();
     this.scrollObserver = null;
   }
 
-  handleFilter = e => {
+  handleFilter = (e) => {
     this.setState({ activeFilter: e.target.name });
   };
 
-  removeQuery = e => {
+  removeQuery = (e) => {
     this.setState({
       query: {
         ...this.state.query,
-        [e.target.name]: ""
-      }
-    })
-  }
+        [e.target.name]: "",
+      },
+    });
+  };
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { activeFilter, query } = this.state;
     const input = e.target.value;
     this.setState({
       query: {
         ...query,
-        [activeFilter]: input
-      }
+        [activeFilter]: input,
+      },
     });
   };
   shouldComponentUpdate(nextState) {
@@ -70,23 +70,23 @@ class App extends Component {
 
     return bookmark || items || page;
   }
-  handleBookmark = item => {
+  handleBookmark = (item) => {
     const bookmark = this.state.bookmark;
     const index = bookmark.indexOf(item);
 
     if (index < 0) {
       console.log("handleBookmark push " + item);
       bookmark.push(item);
-      alert('Bookmarked');
+      alert("Bookmarked");
     } else {
       // route가 bookmark일때만 지우는 조건 : 현재 home탭에서도 북마크 삭제 가능
       console.log(item + "removed");
       bookmark.splice(index, 1);
-      alert('Bookmark deleted');
+      alert("Bookmark deleted");
     }
 
     this.setState({
-      bookmark: bookmark
+      bookmark: bookmark,
     });
     localStorage.setItem("bookmark", JSON.stringify(bookmark));
   };
@@ -100,7 +100,7 @@ class App extends Component {
       storageCollection.links !== null && // REST에서 제공되는 좌표 X
       storageCollection.links[storageCollection.links.length - 1].rel != "prev" // 마지막 페이지가 아님
     ) {
-      axios.get(storageCollection.links[0].href).then(res => {
+      axios.get(storageCollection.links[0].href).then((res) => {
         const nextpageItems = res.data.collection.items;
 
         storageCollection = JSON.parse(localStorage.getItem("collection"));
@@ -111,35 +111,44 @@ class App extends Component {
       });
     }
 
-    if (items.length < storageCollection.items.length) {
+    if (
+      storageCollection &&
+      storageCollection.items &&
+      items.length < storageCollection.items.length
+    ) {
       this.setState({
         page: page + 1,
         items: items.concat(
           storageCollection.items.slice(page * 10, (page + 1) * 10)
-        )
+        ),
       });
       console.log(this.state.items);
     }
   };
 
-  handleSearch = (searchQuery = { total: 'moon' }) => {
-    const queryString = Object.keys(searchQuery).map(queryName => { return searchQuery[queryName] ? filterMapper[queryName] + "=" + searchQuery[queryName] + "&" : "" }
-    ).join("");
+  handleSearch = (searchQuery = { total: "moon" }) => {
+    const queryString = Object.keys(searchQuery)
+      .map((queryName) => {
+        return searchQuery[queryName]
+          ? filterMapper[queryName] + "=" + searchQuery[queryName] + "&"
+          : "";
+      })
+      .join("");
     axios
       .get(nasaAPIRUL + "search?" + queryString)
-      .then(res => {
+      .then((res) => {
         localStorage.setItem("collection", JSON.stringify(res.data.collection));
         this.setState({
           items: res.data.collection.items.slice(0, 10),
           query: {
             ...this.state.query,
-            ...searchQuery
+            ...searchQuery,
           },
           page: 1,
-          total_hit: res.data.collection.metadata.total_hits
+          total_hit: res.data.collection.metadata.total_hits,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -151,23 +160,23 @@ class App extends Component {
     if (storageCollection != null) {
       this.setState({
         items: storageCollection.items.slice(0, 10),
-        total_hit: storageCollection.metadata.total_hits
+        total_hit: storageCollection.metadata.total_hits,
       });
     }
     // LocalStorage에 저장된 데이터 없이 초기 로딩
     else {
       axios
         .get(nasaAPIRUL + "search?q=" + query.total + "&page=" + page)
-        .then(res => {
+        .then((res) => {
           const defaultItems = res.data.collection;
 
           this.setState({
             items: defaultItems.items.slice(0, 10),
-            total_hit: res.data.collection.metadata.total_hits
+            total_hit: res.data.collection.metadata.total_hits,
           });
           localStorage.setItem("collection", JSON.stringify(defaultItems));
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     }
@@ -178,25 +187,27 @@ class App extends Component {
 
     if (storageBookmark != null) {
       this.setState({
-        bookmark: storageBookmark
+        bookmark: storageBookmark,
       });
     } else {
       this.setState({
-        bookmark: []
+        bookmark: [],
       });
     }
   }
   componentDidMount() {
     this.loadInitialImageItems();
     this.loadInitailBookmarkItems();
-    console.log('this.cardListRef', this.cardListRef);
+    console.log("this.cardListRef", this.cardListRef);
     if (this.cardListRef) {
-      this.scrollObserver = new IntersectionObserver(([entry]) => {
-        console.log(this.state, 'this.state');
-        if (entry.isIntersecting && this.state.items) {
-          this.handlePagination();
-        }
-      }, { threshold: 0.1 });
+      this.scrollObserver = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            this.handlePagination();
+          }
+        },
+        { threshold: 0.1 }
+      );
       this.scrollObserver.observe(this.cardListRef.current);
     }
   }
@@ -205,10 +216,9 @@ class App extends Component {
     const { items, total_hit, bookmark, query, activeFilter } = this.state;
     const { offsetHeight } = document.body;
     return (
-      <div >
+      <div>
         <Template>
-          <div className="content--canvas">
-          </div>
+          <div className="content--canvas"></div>
           <Navigation
             onSubmit={() => this.handleSearch(query)}
             handleFilter={this.handleFilter}
@@ -219,7 +229,8 @@ class App extends Component {
             total_hit={total_hit}
           />
           <Route
-            exact path="/"
+            exact
+            path="/"
             render={() => (
               <div>
                 {total_hit} Search result
@@ -242,11 +253,17 @@ class App extends Component {
             path="/bookmark"
           />
         </Template>
-        <div ref={this.cardListRef} style={{
-          // display:'none',
-          position: 'absolute',
-          bottom: - offsetHeight + 600,
-        }} > ---</div>
+        <div
+          ref={this.cardListRef}
+          style={{
+            // display:'none',
+            position: "absolute",
+            bottom: -offsetHeight + 600,
+          }}
+        >
+          {" "}
+          ---
+        </div>
       </div>
     );
   }

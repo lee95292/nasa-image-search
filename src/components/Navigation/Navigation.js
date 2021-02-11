@@ -39,6 +39,9 @@ const isEmptyQuery = (q) => {
 const queryEmptyMessage = 'queryEmptyMessage'
 
 class Navigation extends Component {
+  constructor(props){
+    super(props);
+  }
   handleKeyPress = (e) => {
     const { onSubmit } = this.props;
     if (e.key === "Enter") {
