@@ -4,7 +4,7 @@ import ImageList from "./ImageList";
 import Navigation from "./Navigation";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-import { Route } from "react-router-dom";
+import { BrowserRouter, Route ,Routes } from "react-router-dom";
 import "./App.css";
 
 const nasaAPIRUL = "https://images-api.nasa.gov/";
@@ -217,6 +217,8 @@ class App extends Component {
     const { offsetHeight } = document.body;
     return (
       <div>
+        <BrowserRouter>
+        
         <Template>
           <div className="content--canvas"></div>
           <Navigation
@@ -228,6 +230,8 @@ class App extends Component {
             query={query}
             total_hit={total_hit}
           />
+          <Routes>
+
           <Route
             exact
             path="/"
@@ -252,6 +256,7 @@ class App extends Component {
             )}
             path="/bookmark"
           />
+          </Routes>
         </Template>
         <div
           ref={this.cardListRef}
@@ -264,6 +269,7 @@ class App extends Component {
           {" "}
           ---
         </div>
+        </BrowserRouter>
       </div>
     );
   }
