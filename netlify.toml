@@ -1,5 +1,12 @@
 [[redirects]]
-  from = "https://blog.mglee.dev"
-  to = "https://mglee.dev"
+  from = "https://nasaimg.netlify.app/*"
+  to = "https://mglee.dev/:splat"
+  status = 301
+  force = true
+
+
+[[redirects]]
+  from = "https://blog.mglee.dev/*"
+  to = "https://mglee.dev/:splat"
   status = 301
   force = true
