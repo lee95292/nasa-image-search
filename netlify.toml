@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "https://nasaimg.netlify.app"
+  to = "https://mglee.dev"
+  status = 301
+  force = true
